@@ -1,0 +1,128 @@
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+abstract class "Member2" as Member2 {
+  -id: integer
+  -username: String
+  -password: String
+  -fullName: String
+  -address: String
+  -email: String
+  -phone: String
+}
+
+class Customer2 {
+  -customerCode: String
+}
+
+class CustomerStat2 {
+  -totalInvoices: integer
+  -totalAmount: float
+}
+
+abstract class "Employee2" as Employee2 {
+  -employeeCode: String
+  -position: String
+}
+
+class SalesStaff2
+class Manager2
+
+class Supplier2 {
+  -id: integer
+  -supplierCode: String
+  -name: String
+  -address: String
+  -phone: String
+  -email: String
+  -description: String
+}
+
+class SupplierStat2 {
+  -totalImports: integer
+  -totalImportValue: float
+}
+
+class Item2 {
+  -id: integer
+  -itemCode: String
+  -name: String
+  -unit: String
+  -price: float
+  -stockQuantity: integer
+  -description: String
+}
+
+class ItemRevenueStat2 {
+  -totalQuantitySold: integer
+  -totalRevenue: float
+}
+
+class ItemImportStat2 {
+  -totalQuantityImported: integer
+  -totalImportAmount: float
+}
+
+class Invoice2 {
+  -id: integer
+  -invoiceCode: String
+  -createdDate: Date
+  -deliveryAddress: String
+  -totalAmount: float
+  -status: String
+  -deliveryStaffName: String
+  -customer: Customer2
+  -salesStaff: SalesStaff2
+  -listInvoiceDetail: InvoiceDetail2[]
+}
+
+class InvoiceDetail2 {
+  -id: integer
+  -quantity: integer
+  -unitPrice: float
+  -item: Item2
+  -invoice: Invoice2
+}
+
+class ImportReceipt2 {
+  -id: integer
+  -receiptCode: String
+  -importDate: Date
+  -totalAmount: float
+  -manager: Manager2
+  -supplier: Supplier2
+  -listImportReceiptDetail: ImportReceiptDetail2[]
+}
+
+class ImportReceiptDetail2 {
+  -id: integer
+  -quantity: integer
+  -importPrice: float
+  -item: Item2
+  -importReceipt: ImportReceipt2
+}
+
+' 1. Quan hệ kế thừa (Generalization)
+Member2 <|-- Customer2
+Member2 <|-- Employee2
+Customer2 <|-- CustomerStat2
+Employee2 <|-- SalesStaff2
+Employee2 <|-- Manager2
+Supplier2 <|-- SupplierStat2
+Item2 <|-- ItemRevenueStat2
+Item2 <|-- ItemImportStat2
+
+' 2. Quan hệ hợp thành (Aggregation) và gắn chặt (Composition)
+Customer2 --o Invoice2
+SalesStaff2 --o Invoice2
+InvoiceDetail2 --* Invoice2
+Item2 --o InvoiceDetail2
+
+Manager2 --o ImportReceipt2
+Supplier2 --o ImportReceipt2
+ImportReceiptDetail2 --* ImportReceipt2
+Item2 --o ImportReceiptDetail2
+@enduml

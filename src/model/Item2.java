@@ -15,16 +15,6 @@ public class Item2 implements Serializable {
     public Item2() {
     }
 
-    public Item2(int id, String itemCode, String name, String unit, float price, int stockQuantity, String description) {
-        this.id = id;
-        this.itemCode = itemCode;
-        this.name = name;
-        this.unit = unit;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.description = description;
-    }
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

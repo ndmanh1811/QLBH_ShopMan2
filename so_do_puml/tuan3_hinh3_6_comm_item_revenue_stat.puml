@@ -1,0 +1,46 @@
+@startuml
+skinparam linetype polyline
+
+actor "Manager" as Manager
+boundary "ManagerHomeFrm2" as ManagerHomeFrm2
+boundary "SelectStatTypeFrm2" as SelectStatTypeFrm2
+boundary "SelectDateRangeFrm2" as SelectDateRangeFrm2
+boundary "ItemRevenueStatFrm2" as ItemRevenueStatFrm2
+boundary "ItemTransactionDetailFrm2" as ItemTransactionDetailFrm2
+entity "ItemRevenueStat2" as ItemRevenueStat2
+entity "InvoiceDetail2" as InvoiceDetail2
+
+' 1. Khởi tạo từ màn hình chính
+Manager -down- ManagerHomeFrm2 : 1: chọn xem thống kê ↓
+ManagerHomeFrm2 -right- SelectStatTypeFrm2 : 2: gọi →
+
+' 2. Chọn kiểu thống kê
+Manager -down- SelectStatTypeFrm2 : 3: hiển thị ↑
+4: chọn TK mặt hàng
+theo doanh thu ↓
+SelectStatTypeFrm2 -right- SelectDateRangeFrm2 : 5: gọi →
+
+' 3. Chọn khoảng thời gian
+Manager -down- SelectDateRangeFrm2 : 6: hiển thị ↑
+7: chọn khoảng ngày
+và click xem ↓
+SelectDateRangeFrm2 -right- ItemRevenueStatFrm2 : 8: gọi →
+
+' 4. Truy vấn thống kê doanh thu mặt hàng
+ItemRevenueStatFrm2 -down- ItemRevenueStat2 : 9: gọi ↓
+11: trả về ↑
+ItemRevenueStat2 -down-> ItemRevenueStat2 : 10: getItemRevenueStat()
+
+' 5. Hiển thị bảng thống kê & chọn 1 mặt hàng
+Manager -down- ItemRevenueStatFrm2 : 12: hiển thị ↑
+13: chọn 1 mặt hàng ↓
+ItemRevenueStatFrm2 -right- ItemTransactionDetailFrm2 : 14: gọi →
+
+' 6. Truy vấn chi tiết giao dịch của mặt hàng
+ItemTransactionDetailFrm2 -down- InvoiceDetail2 : 15: gọi ↓
+17: trả về ↑
+InvoiceDetail2 -down-> InvoiceDetail2 : 16: getItemTransactionDetails()
+
+' 7. Hiển thị chi tiết giao dịch cho quản lí
+Manager -down- ItemTransactionDetailFrm2 : 18: hiển thị ↑
+@enduml

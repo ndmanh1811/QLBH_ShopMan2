@@ -13,21 +13,6 @@ public class InvoiceDetail2 implements Serializable {
     public InvoiceDetail2() {
     }
 
-    public InvoiceDetail2(int id, int quantity, float unitPrice, Item2 item) {
-        this.id = id;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.item = item;
-    }
-
-    public InvoiceDetail2(int id, int quantity, float unitPrice, Item2 item, Invoice2 invoice) {
-        this.id = id;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.item = item;
-        this.invoice = invoice;
-    }
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

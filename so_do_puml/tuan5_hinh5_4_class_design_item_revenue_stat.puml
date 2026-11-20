@@ -1,0 +1,171 @@
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+' Hàng 1: Giao diện điều hướng
+class "ManagerHomeFrm2.jsp" as ManagerHomeFrm2_jsp {
+  -subViewStatistics: link
+  -manager: Manager2
+}
+
+class "SelectStatTypeFrm2.jsp" as SelectStatTypeFrm2_jsp {
+  -inoutStatType: Select
+  -subSelect: submit
+  -subBack: link
+  -manager: Manager2
+}
+
+class "SelectDateRangeFrm2.jsp" as SelectDateRangeFrm2_jsp {
+  -inStartDate: Text
+  -inEndDate: Text
+  -outMessage: String
+  -subViewStat: submit
+  -subBack: link
+  -manager: Manager2
+}
+
+' Hàng 2: Giao diện báo cáo thống kê
+class "ItemRevenueStatFrm2.jsp" as ItemRevenueStatFrm2_jsp {
+  -listItemRevenueStat: ItemRevenueStat2[]
+  -outsubItemRevenueStatList: Table
+  -subSelectItem: link
+  -outMessage: String
+  -subBack: link
+  -startDate: Date
+  -endDate: Date
+  -manager: Manager2
+}
+
+class "ItemTransactionDetailFrm2.jsp" as ItemTransactionDetailFrm2_jsp {
+  -listTransactionDetail: InvoiceDetail2[]
+  -outTransactionDetailList: Table
+  -outItemName: String
+  -outDateRange: String
+  -outTotalQuantity: integer
+  -outTotalRevenue: float
+  -subBack: link
+  -item: Item2
+  -startDate: Date
+  -endDate: Date
+  -manager: Manager2
+}
+
+' Hàng 3: Tầng truy xuất dữ liệu (DAO)
+class ItemRevenueStatDAO2 {
+  +ItemRevenueStatDAO2()
+  +getItemRevenueStat(startDate: Date, endDate: Date): ItemRevenueStat2[]
+}
+
+class DAO2 {
+  -con: Connection
+  +DAO2()
+}
+
+class InvoiceDetailDAO2 {
+  +InvoiceDetailDAO2()
+  +getItemTransactionDetails(itemCode: String, startDate: Date, endDate: Date): InvoiceDetail2[]
+}
+
+' Hàng 4: Lớp thống kê mặt hàng & Chi tiết hóa đơn
+class ItemRevenueStat2 {
+  -totalQuantitySold: integer
+  -totalRevenue: float
+}
+
+class InvoiceDetail2 {
+  -id: integer
+  -quantity: integer
+  -unitPrice: float
+  -item: Item2
+  -invoice: Invoice2
+}
+
+' Hàng 5: Lớp mặt hàng & Hóa đơn
+class Item2 {
+  -id: integer
+  -itemCode: String
+  -name: String
+  -unit: String
+  -price: float
+  -stockQuantity: integer
+  -description: String
+}
+
+class Invoice2 {
+  -id: integer
+  -invoiceCode: String
+  -createdDate: Date
+  -deliveryAddress: String
+  -totalAmount: float
+  -status: String
+  -deliveryStaffName: String
+  -customer: Customer2
+  -salesStaff: SalesStaff2
+  -listInvoiceDetail: InvoiceDetail2[]
+}
+
+' Khối phân quyền người dùng
+abstract class "Member2" as Member2 {
+  -id: integer
+  -username: String
+  -password: String
+  -fullName: String
+  -address: String
+  -email: String
+  -phone: String
+}
+
+class Customer2 {
+  -customerCode: String
+}
+
+abstract class "Employee2" as Employee2 {
+  -employeeCode: String
+  -position: String
+}
+
+class SalesStaff2
+class Manager2
+
+' 1. Điều hướng JSP
+ManagerHomeFrm2_jsp -right- SelectStatTypeFrm2_jsp
+SelectStatTypeFrm2_jsp -right- SelectDateRangeFrm2_jsp
+SelectDateRangeFrm2_jsp -down- ItemRevenueStatFrm2_jsp
+ItemRevenueStatFrm2_jsp -right- ItemTransactionDetailFrm2_jsp
+
+' 2. View nối DAO
+ItemRevenueStatFrm2_jsp -down- ItemRevenueStatDAO2
+ItemTransactionDetailFrm2_jsp -down- InvoiceDetailDAO2
+
+' 3. Kế thừa DAO về DAO2 ở giữa
+ItemRevenueStatDAO2 -right-|> DAO2
+InvoiceDetailDAO2 -left-|> DAO2
+
+' 4. DAO xuống Model
+ItemRevenueStatDAO2 -down- ItemRevenueStat2
+InvoiceDetailDAO2 -down- InvoiceDetail2
+
+' 5. Model quan hệ
+ItemRevenueStat2 -down-|> Item2
+Item2 -right-o InvoiceDetail2
+InvoiceDetail2 -down-* Invoice2
+
+Customer2 -down-o Invoice2
+SalesStaff2 -down-o Invoice2
+
+Member2 <|-- Customer2
+Member2 <|-- Employee2
+Employee2 <|-- SalesStaff2
+Employee2 <|-- Manager2
+
+' Ràng buộc vị trí cân đối
+ItemRevenueStatDAO2 -[hidden]right- DAO2
+DAO2 -[hidden]right- InvoiceDetailDAO2
+
+ItemRevenueStat2 -[hidden]right- InvoiceDetail2
+Item2 -[hidden]right- Invoice2
+Invoice2 -[hidden]right- Customer2
+Customer2 -[hidden]right- SalesStaff2
+@enduml

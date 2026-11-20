@@ -1,0 +1,103 @@
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+' Chuỗi lớp biên điều hướng
+class ManagerHomeFrm2 {
+  -subViewStatistics
+}
+
+class SelectStatTypeFrm2 {
+  -inoutStatType
+  -subSelect
+  -subBack
+}
+
+class SelectDateRangeFrm2 {
+  -inStartDate
+  -inEndDate
+  -outMessage
+  -subViewStat
+  -subBack
+}
+
+class ItemRevenueStatFrm2 {
+  -outsubItemRevenueStatList
+  -outMessage
+  -subBack
+}
+
+class ItemTransactionDetailFrm2 {
+  -outItemName
+  -outDateRange
+  -outTransactionDetailList
+  -outTotalQuantity
+  -outTotalRevenue
+  -subBack
+}
+
+' Các lớp thực thể của hệ thống ShopMan
+abstract class "Member2" as Member2 {
+  -username
+  -password
+  -fullName
+  -address
+  -email
+  -phone
+}
+
+class Customer2 {
+  -customerCode
+}
+
+class Item2 {
+  -itemCode
+  -name
+  -unit
+  -price
+  -stockQuantity
+  -description
+}
+
+class Invoice2 {
+  -invoiceCode
+  -createdDate
+  -deliveryAddress
+  -totalAmount
+  -status
+  -deliveryStaffName
+}
+
+class ItemRevenueStat2 {
+  -totalQuantitySold
+  -totalRevenue
+  +getItemRevenueStat(startDate, endDate)
+}
+
+class InvoiceDetail2 {
+  -quantity
+  -unitPrice
+  +getItemTransactionDetails(itemCode, startDate, endDate)
+}
+
+' 1. Điều hướng chuỗi lớp biên
+ManagerHomeFrm2 -down- SelectStatTypeFrm2
+SelectStatTypeFrm2 -down- SelectDateRangeFrm2
+SelectDateRangeFrm2 -down- ItemRevenueStatFrm2
+ItemRevenueStatFrm2 -down- ItemTransactionDetailFrm2
+
+' 2. Quan hệ giữa các lớp thực thể
+Member2 <|-- Customer2
+Customer2 --o Invoice2
+
+Item2 -right- Invoice2
+(Item2, Invoice2) .. InvoiceDetail2
+
+Item2 <|-- ItemRevenueStat2
+
+' 3. Lớp biên gọi lớp thực thể tương ứng
+ItemRevenueStatFrm2 -right- ItemRevenueStat2
+ItemTransactionDetailFrm2 -right- InvoiceDetail2
+@enduml

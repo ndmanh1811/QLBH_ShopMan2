@@ -1,0 +1,80 @@
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+' Tầng giao diện (View - JSP)
+class "CustomerHomeFrm2.jsp" as CustomerHomeFrm2_jsp {
+  -subRegister: link
+}
+
+class "RegisterMemberFrm2.jsp" as RegisterMemberFrm2_jsp {
+  -inFullName: Text
+  -inUsername: Text
+  -inPassword: Password
+  -inPhone: Text
+  -inEmail: Text
+  -inAddress: Text
+  -outMessage: String
+  -subRegister: submit
+  -subBack: link
+  -customer: Customer2
+}
+
+class "doRegisterMember2.jsp" as doRegisterMember2_jsp {
+  -customer: Customer2
+}
+
+class "LoginFrm2.jsp" as LoginFrm2_jsp
+
+' Tầng truy xuất dữ liệu (DAO)
+class DAO2 {
+  -con: Connection
+  +DAO2()
+}
+
+class MemberDAO2 {
+  +MemberDAO2()
+  +checkExistingMember(username: String, email: String): boolean
+}
+
+class CustomerDAO2 {
+  +CustomerDAO2()
+  +saveCustomer(customer: Customer2): boolean
+}
+
+' Tầng thực thể (Model)
+abstract class "Member2" as Member2 {
+  -id: integer
+  -username: String
+  -password: String
+  -fullName: String
+  -address: String
+  -email: String
+  -phone: String
+}
+
+class Customer2 {
+  -customerCode: String
+}
+
+' Luồng chuyển giao diện
+CustomerHomeFrm2_jsp -right- RegisterMemberFrm2_jsp
+RegisterMemberFrm2_jsp -down- doRegisterMember2_jsp
+doRegisterMember2_jsp -right- LoginFrm2_jsp
+CustomerHomeFrm2_jsp -[hidden]down- DAO2
+
+' Quan hệ View - DAO
+doRegisterMember2_jsp -- MemberDAO2
+doRegisterMember2_jsp -- CustomerDAO2
+
+' Quan hệ kế thừa DAO
+DAO2 <|-- MemberDAO2
+DAO2 <|-- CustomerDAO2
+
+' Quan hệ DAO - Model và kế thừa Model
+MemberDAO2 -- Member2
+CustomerDAO2 -- Customer2
+Member2 <|-- Customer2
+@enduml

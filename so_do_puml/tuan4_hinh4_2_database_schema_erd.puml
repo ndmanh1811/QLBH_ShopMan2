@@ -1,0 +1,105 @@
+@startuml
+skinparam linetype ortho
+hide circle
+
+entity "tblMember2" as tblMember2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * username : varchar(255) <<UQ>>
+  * password : varchar(255)
+  * fullName : varchar(255)
+  * address : varchar(255)
+  * email : varchar(255) <<UQ>>
+  * phone : varchar(50)
+}
+
+entity "tblCustomer2" as tblCustomer2 {
+  * **tblMember2id** : integer(10) <<PK, FK>>
+  --
+  * customerCode : varchar(50) <<UQ>>
+}
+
+entity "tblEmployee2" as tblEmployee2 {
+  * **tblMember2id** : integer(10) <<PK, FK>>
+  --
+  * employeeCode : varchar(50) <<UQ>>
+  * position : varchar(50)
+}
+
+entity "tblSupplier2" as tblSupplier2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * supplierCode : varchar(50) <<UQ>>
+  * name : varchar(255)
+  * address : varchar(255)
+  * phone : varchar(50)
+  * email : varchar(255)
+    description : varchar(255)
+}
+
+entity "tblItem2" as tblItem2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * itemCode : varchar(50) <<UQ>>
+  * name : varchar(255)
+  * unit : varchar(50)
+  * price : float(10)
+  * stockQuantity : integer(10)
+    description : varchar(255)
+}
+
+entity "tblInvoice2" as tblInvoice2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * invoiceCode : varchar(50) <<UQ>>
+  * createdDate : date
+  * deliveryAddress : varchar(255)
+  * status : varchar(50)
+    deliveryStaffName : varchar(255)
+  * tblCustomer2id : integer(10) <<FK>>
+    tblEmployee2id : integer(10) <<FK>>
+}
+
+entity "tblInvoiceDetail2" as tblInvoiceDetail2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * quantity : integer(10)
+  * unitPrice : float(10)
+  * tblInvoice2id : integer(10) <<FK>>
+  * tblItem2id : integer(10) <<FK>>
+}
+
+entity "tblImportReceipt2" as tblImportReceipt2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * receiptCode : varchar(50) <<UQ>>
+  * importDate : date
+  * tblEmployee2id : integer(10) <<FK>>
+  * tblSupplier2id : integer(10) <<FK>>
+}
+
+entity "tblImportReceiptDetail2" as tblImportReceiptDetail2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * quantity : integer(10)
+  * importPrice : float(10)
+  * tblImportReceipt2id : integer(10) <<FK>>
+  * tblItem2id : integer(10) <<FK>>
+}
+
+' Quan hệ kế thừa (1 - 0..1)
+tblMember2 ||--o| tblCustomer2
+tblMember2 ||--o| tblEmployee2
+
+' Quan hệ hóa đơn bán hàng
+tblCustomer2 ||--o{ tblInvoice2
+tblEmployee2 |o--o{ tblInvoice2
+tblInvoice2 ||--|{ tblInvoiceDetail2
+tblItem2 ||--o{ tblInvoiceDetail2
+
+' Quan hệ phiếu nhập hàng
+tblEmployee2 ||--o{ tblImportReceipt2
+tblSupplier2 ||--o{ tblImportReceipt2
+tblImportReceipt2 ||--|{ tblImportReceiptDetail2
+tblItem2 ||--o{ tblImportReceiptDetail2
+@enduml

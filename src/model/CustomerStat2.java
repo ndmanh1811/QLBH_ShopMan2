@@ -3,7 +3,7 @@ package model;
 public class CustomerStat2 extends Customer2 {
     private static final long serialVersionUID = 2L;
     private int totalInvoices;
-    private float totalRevenue;
+    private float totalAmount;
 
     public CustomerStat2() {
         super();
@@ -12,6 +12,6 @@ public class CustomerStat2 extends Customer2 {
     public int getTotalInvoices() { return totalInvoices; }
     public void setTotalInvoices(int totalInvoices) { this.totalInvoices = totalInvoices; }
 
-    public float getTotalRevenue() { return totalRevenue; }
-    public void setTotalRevenue(float totalRevenue) { this.totalRevenue = totalRevenue; }
+    public float getTotalAmount() { return totalAmount; }
+    public void setTotalAmount(float totalAmount) { this.totalAmount = totalAmount; }
 }

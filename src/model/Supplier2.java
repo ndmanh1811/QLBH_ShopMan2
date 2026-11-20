@@ -15,16 +15,6 @@ public class Supplier2 implements Serializable {
     public Supplier2() {
     }
 
-    public Supplier2(int id, String supplierCode, String name, String address, String phone, String email, String description) {
-        this.id = id;
-        this.supplierCode = supplierCode;
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.email = email;
-        this.description = description;
-    }
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

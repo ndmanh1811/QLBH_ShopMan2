@@ -8,17 +8,8 @@ public class Customer2 extends Member2 {
         super();
     }
 
-    public Customer2(String customerCode) {
-        this.customerCode = customerCode;
-    }
-
     public Customer2(String username, String password, String fullName, String address, String email, String phone, String customerCode) {
         super(username, password, fullName, address, email, phone);
-        this.customerCode = customerCode;
-    }
-
-    public Customer2(int id, String username, String password, String fullName, String address, String email, String phone, String customerCode) {
-        super(id, username, password, fullName, address, email, phone);
         this.customerCode = customerCode;
     }
 

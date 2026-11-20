@@ -1,0 +1,23 @@
+@startuml
+autonumber
+
+actor Customer
+participant CustomerHomeFrm2
+participant RegisterMemberFrm2
+participant LoginFrm2
+participant Customer2
+
+Customer -> CustomerHomeFrm2 : chọn đăng kí thành viên
+CustomerHomeFrm2 -> RegisterMemberFrm2 : gọi
+RegisterMemberFrm2 --> Customer : hiển thị
+Customer -> RegisterMemberFrm2 : nhập thông tin và click đăng kí
+RegisterMemberFrm2 -> Customer2 : gọi
+Customer2 -> Customer2 : checkExistingMember()
+Customer2 --> RegisterMemberFrm2 : trả về hợp lệ
+RegisterMemberFrm2 -> Customer2 : gọi
+Customer2 -> Customer2 : saveCustomer()
+Customer2 --> RegisterMemberFrm2 : trả về thành công
+RegisterMemberFrm2 --> Customer : báo thành công
+RegisterMemberFrm2 -> LoginFrm2 : gọi
+LoginFrm2 --> Customer : hiển thị
+@enduml

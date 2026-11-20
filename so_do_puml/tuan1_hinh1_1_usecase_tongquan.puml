@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Member" as Member
+actor "Customer" as Customer
+actor "Employee" as Employee
+actor "Sales Staff" as SalesStaff
+actor "Manager" as Manager
+
+Customer --|> Member
+Employee --|> Member
+SalesStaff --|> Employee
+Manager --|> Employee
+
+rectangle "Online Grocery Management System (ShopMan)" {
+  usecase "Login 2" as UC_Login
+  usecase "Register Member 2" as UC_Register
+  usecase "Search Item 2" as UC_SearchItem
+  usecase "Place Online Invoice 2" as UC_PlaceInv
+  usecase "Track Invoice Status 2" as UC_TrackInv
+  usecase "Approve Online Invoice 2" as UC_ApproveInv
+  usecase "Pack And Hand Over Invoice 2" as UC_PackInv
+  usecase "Confirm Delivery 2" as UC_ConfirmDelivery
+  usecase "Manage Item Information 2" as UC_ManageItem
+  usecase "Manage Supplier Information 2" as UC_ManageSup
+  usecase "Import Item 2" as UC_ImportItem
+  usecase "View Statistics 2" as UC_ViewStat
+}
+
+Member -- UC_Login
+Customer -- UC_Register
+Customer -- UC_SearchItem
+Customer -- UC_PlaceInv
+Customer -- UC_TrackInv
+SalesStaff -- UC_ApproveInv
+SalesStaff -- UC_PackInv
+SalesStaff -- UC_ConfirmDelivery
+Manager -- UC_ManageItem
+Manager -- UC_ManageSup
+Manager -- UC_ImportItem
+Manager -- UC_ViewStat
+@enduml

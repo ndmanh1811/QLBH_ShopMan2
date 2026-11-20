@@ -5,7 +5,7 @@
     if (manager == null) {
         manager = new Manager2();
         manager.setFullName("Nguyễn Đức Mạnh");
-        manager.setUsername("manager01");
+        manager.setUsername("quanli1");
         session.setAttribute("manager", manager);
     }
 %>

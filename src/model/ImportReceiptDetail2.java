@@ -13,21 +13,6 @@ public class ImportReceiptDetail2 implements Serializable {
     public ImportReceiptDetail2() {
     }
 
-    public ImportReceiptDetail2(int id, int quantity, float importPrice, Item2 item) {
-        this.id = id;
-        this.quantity = quantity;
-        this.importPrice = importPrice;
-        this.item = item;
-    }
-
-    public ImportReceiptDetail2(int id, int quantity, float importPrice, Item2 item, ImportReceipt2 importReceipt) {
-        this.id = id;
-        this.quantity = quantity;
-        this.importPrice = importPrice;
-        this.item = item;
-        this.importReceipt = importReceipt;
-    }
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

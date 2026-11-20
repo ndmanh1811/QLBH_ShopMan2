@@ -1,0 +1,1404 @@
+# TỔNG HỢP 20 BIỂU ĐỒ CHÍNH THỨC HỆ THỐNG SHOPMAN (ĐỀ SỐ 35 - HẬU TỐ 2)
+> Hệ thống: Quản lý Bách hóa Trực tuyến ShopMan (SV: Nguyễn Đức Mạnh - B23DCCN532)
+> Khớp 1-1 với 20 biểu đồ UML chính thức trong Báo cáo tổng hợp (Hình 1.1 đến Hình 6.6)
+> Cú pháp PlantUML chuẩn mặc định, sẵn sàng để kiểm tra đối chiếu.
+
+## 1. Hình 1.1: Sơ đồ use case tổng quan hệ thống ShopMan
+*Tệp nguồn: `tuan1_hinh1_1_usecase_tongquan.puml`*
+
+```plantuml
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Member" as Member
+actor "Customer" as Customer
+actor "Employee" as Employee
+actor "Sales Staff" as SalesStaff
+actor "Manager" as Manager
+
+Customer --|> Member
+Employee --|> Member
+SalesStaff --|> Employee
+Manager --|> Employee
+
+rectangle "Online Grocery Management System (ShopMan)" {
+  usecase "Login 2" as UC_Login
+  usecase "Register Member 2" as UC_Register
+  usecase "Search Item 2" as UC_SearchItem
+  usecase "Place Online Invoice 2" as UC_PlaceInv
+  usecase "Track Invoice Status 2" as UC_TrackInv
+  usecase "Approve Online Invoice 2" as UC_ApproveInv
+  usecase "Pack And Hand Over Invoice 2" as UC_PackInv
+  usecase "Confirm Delivery 2" as UC_ConfirmDelivery
+  usecase "Manage Item Information 2" as UC_ManageItem
+  usecase "Manage Supplier Information 2" as UC_ManageSup
+  usecase "Import Item 2" as UC_ImportItem
+  usecase "View Statistics 2" as UC_ViewStat
+}
+
+Member -- UC_Login
+Customer -- UC_Register
+Customer -- UC_SearchItem
+Customer -- UC_PlaceInv
+Customer -- UC_TrackInv
+SalesStaff -- UC_ApproveInv
+SalesStaff -- UC_PackInv
+SalesStaff -- UC_ConfirmDelivery
+Manager -- UC_ManageItem
+Manager -- UC_ManageSup
+Manager -- UC_ImportItem
+Manager -- UC_ViewStat
+@enduml
+```
+
+## 2. Hình 1.2: Sơ đồ use case chi tiết module Đăng ký thành viên
+*Tệp nguồn: `tuan1_hinh1_2_usecase_register_member.puml`*
+
+```plantuml
+@startuml
+left to right direction
+
+actor "Customer" as Customer
+
+rectangle "Module 1: Customer Member Registration" {
+  usecase "Register Member 2" as UC_Reg
+  usecase "Enter Personal Information 2" as UC_EnterInfo
+}
+
+Customer -- UC_Reg
+UC_Reg ..> UC_EnterInfo : <<include>>
+@enduml
+```
+
+## 3. Hình 1.3: Sơ đồ use case chi tiết module Thống kê mặt hàng theo doanh thu
+*Tệp nguồn: `tuan1_hinh1_3_usecase_item_revenue_stat.puml`*
+
+```plantuml
+@startuml
+left to right direction
+
+actor "Member" as Member
+actor "Employee" as Employee
+actor "Manager" as Manager
+
+Employee --|> Member
+Manager --|> Employee
+
+rectangle "Module 2: Item Statistics By Revenue" {
+  usecase "Login 2" as UC_Login
+  usecase "Manager Login 2" as UC_MgrLogin
+  usecase "View Statistics 2" as UC_ViewStat
+  usecase "View Item Statistics By Revenue 2" as UC_ItemRev
+  usecase "Select Statistics Date Range 2" as UC_DateRange
+  usecase "View Item Transaction Details 2" as UC_TransDetail
+}
+
+Member -- UC_Login
+UC_MgrLogin --|> UC_Login
+
+Manager -- UC_ViewStat
+UC_ViewStat ..> UC_MgrLogin : <<include>>
+
+UC_ItemRev ..> UC_ViewStat : <<extend>>
+UC_ItemRev ..> UC_DateRange : <<include>>
+UC_TransDetail ..> UC_ItemRev : <<extend>>
+@enduml
+```
+
+## 4. Hình 2.1: Sơ đồ lớp thực thể pha phân tích
+*Tệp nguồn: `tuan2_hinh2_1_class_diagram_phantich.puml`*
+
+```plantuml
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+abstract class "Member2" as Member2 {
+  -username
+  -password
+  -fullName
+  -address
+  -email
+  -phone
+}
+
+class Customer2 {
+  -customerCode
+}
+
+class CustomerStat2 {
+  -totalInvoices
+  -totalAmount
+}
+
+abstract class "Employee2" as Employee2 {
+  -employeeCode
+  -position
+}
+
+class SalesStaff2
+class Manager2
+
+class Supplier2 {
+  -supplierCode
+  -name
+  -address
+  -phone
+  -email
+  -description
+}
+
+class SupplierStat2 {
+  -totalImports
+  -totalImportValue
+}
+
+class Item2 {
+  -itemCode
+  -name
+  -unit
+  -price
+  -stockQuantity
+  -description
+}
+
+class ItemRevenueStat2 {
+  -totalQuantitySold
+  -totalRevenue
+}
+
+class ItemImportStat2 {
+  -totalQuantityImported
+  -totalImportAmount
+}
+
+class Invoice2 {
+  -invoiceCode
+  -createdDate
+  -deliveryAddress
+  -totalAmount
+  -status
+  -deliveryStaffName
+}
+
+class InvoiceDetail2 {
+  -quantity
+  -unitPrice
+}
+
+class ImportReceipt2 {
+  -receiptCode
+  -importDate
+  -totalAmount
+}
+
+class ImportReceiptDetail2 {
+  -quantity
+  -importPrice
+}
+
+' 1. Quan hệ kế thừa (Generalization)
+Member2 <|-- Customer2
+Member2 <|-- Employee2
+Customer2 <|-- CustomerStat2
+Employee2 <|-- SalesStaff2
+Employee2 <|-- Manager2
+
+Supplier2 <|-- SupplierStat2
+Item2 <|-- ItemRevenueStat2
+Item2 <|-- ItemImportStat2
+
+' 2. Quan hệ hợp thành (Aggregation)
+Customer2 --o Invoice2
+SalesStaff2 --o Invoice2
+Manager2 --o ImportReceipt2
+Supplier2 --o ImportReceipt2
+
+' 3. Lớp liên kết trung gian (Association Class)
+Invoice2 -right- Item2
+(Invoice2, Item2) .. InvoiceDetail2
+
+Item2 -right- ImportReceipt2
+(Item2, ImportReceipt2) .. ImportReceiptDetail2
+@enduml
+```
+
+## 5. Hình 3.1: Sơ đồ lớp phân tích BCE - Đăng ký thành viên
+*Tệp nguồn: `tuan3_hinh3_1_bce_register_member.puml`*
+
+```plantuml
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+' Lớp biên (Boundary)
+class CustomerHomeFrm2 {
+  -subRegister
+}
+
+class RegisterMemberFrm2 {
+  -inFullName
+  -inUsername
+  -inPassword
+  -inPhone
+  -inEmail
+  -inAddress
+  -outMessage
+  -subRegister
+  -subBack
+}
+
+class LoginFrm2
+
+' Lớp thực thể (Entity)
+abstract class "Member2" as Member2 {
+  -username
+  -password
+  -fullName
+  -address
+  -email
+  -phone
+  +checkExistingMember(username, email)
+}
+
+class Customer2 {
+  -customerCode
+  +saveCustomer()
+}
+
+' Liên kết lớp biên
+CustomerHomeFrm2 -right- RegisterMemberFrm2
+RegisterMemberFrm2 -right- LoginFrm2
+
+' Liên kết lớp biên - lớp thực thể
+RegisterMemberFrm2 -- Customer2
+
+' Quan hệ giữa các lớp thực thể
+Member2 <|-- Customer2
+@enduml
+```
+
+## 6. Hình 3.2: Sơ đồ lớp phân tích BCE - Thống kê mặt hàng theo doanh thu
+*Tệp nguồn: `tuan3_hinh3_2_bce_item_revenue_stat.puml`*
+
+```plantuml
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+' Chuỗi lớp biên điều hướng
+class ManagerHomeFrm2 {
+  -subViewStatistics
+}
+
+class SelectStatTypeFrm2 {
+  -inoutStatType
+  -subSelect
+  -subBack
+}
+
+class SelectDateRangeFrm2 {
+  -inStartDate
+  -inEndDate
+  -outMessage
+  -subViewStat
+  -subBack
+}
+
+class ItemRevenueStatFrm2 {
+  -outsubItemRevenueStatList
+  -outMessage
+  -subBack
+}
+
+class ItemTransactionDetailFrm2 {
+  -outItemName
+  -outDateRange
+  -outTransactionDetailList
+  -outTotalQuantity
+  -outTotalRevenue
+  -subBack
+}
+
+' Các lớp thực thể của hệ thống ShopMan
+abstract class "Member2" as Member2 {
+  -username
+  -password
+  -fullName
+  -address
+  -email
+  -phone
+}
+
+class Customer2 {
+  -customerCode
+}
+
+class Item2 {
+  -itemCode
+  -name
+  -unit
+  -price
+  -stockQuantity
+  -description
+}
+
+class Invoice2 {
+  -invoiceCode
+  -createdDate
+  -deliveryAddress
+  -totalAmount
+  -status
+  -deliveryStaffName
+}
+
+class ItemRevenueStat2 {
+  -totalQuantitySold
+  -totalRevenue
+  +getItemRevenueStat(startDate, endDate)
+}
+
+class InvoiceDetail2 {
+  -quantity
+  -unitPrice
+  +getItemTransactionDetails(itemCode, startDate, endDate)
+}
+
+' 1. Điều hướng chuỗi lớp biên
+ManagerHomeFrm2 -down- SelectStatTypeFrm2
+SelectStatTypeFrm2 -down- SelectDateRangeFrm2
+SelectDateRangeFrm2 -down- ItemRevenueStatFrm2
+ItemRevenueStatFrm2 -down- ItemTransactionDetailFrm2
+
+' 2. Quan hệ giữa các lớp thực thể
+Member2 <|-- Customer2
+Customer2 --o Invoice2
+
+Item2 -right- Invoice2
+(Item2, Invoice2) .. InvoiceDetail2
+
+Item2 <|-- ItemRevenueStat2
+
+' 3. Lớp biên gọi lớp thực thể tương ứng
+ItemRevenueStatFrm2 -right- ItemRevenueStat2
+ItemTransactionDetailFrm2 -right- InvoiceDetail2
+@enduml
+```
+
+## 7. Hình 3.3: Sơ đồ máy trạng thái module Đăng ký thành viên
+*Tệp nguồn: `tuan3_hinh3_3_state_register_member.puml`*
+
+```plantuml
+@startuml
+hide empty description
+skinparam linetype ortho
+
+[*] --> HienThiGDChinhKH
+state "Hiển thị GD chính KH" as HienThiGDChinhKH
+state "Hiển thị GD đăng kí
+TV" as HienThiGDDangKiTV
+state "Hiển thị GD đăng nhập" as HienThiGDDangNhap
+
+HienThiGDChinhKH --> HienThiGDDangKiTV : Chọn chức năng đăng kí thành viên
+HienThiGDDangKiTV --> HienThiGDChinhKH : Chọn quay lại
+HienThiGDDangKiTV --> HienThiGDDangKiTV : Thông tin thiếu hoặc trùng lặp
+HienThiGDDangKiTV --> HienThiGDDangNhap : Nhập thông tin hợp lệ và nhấn đăng kí
+@enduml
+```
+
+## 8. Hình 3.4: Sơ đồ máy trạng thái module Thống kê mặt hàng theo doanh thu
+*Tệp nguồn: `tuan3_hinh3_4_state_item_revenue_stat.puml`*
+
+```plantuml
+@startuml
+hide empty description
+skinparam linetype ortho
+
+[*] --> HienThiGDChinhQL
+state "Hiển thị GD chính quản lí" as HienThiGDChinhQL
+state "Hiển thị GD chọn loại thống kê" as HienThiGDChonLoaiTK
+state "Hiển thị GD chọn khoảng thời gian" as HienThiGDChonKhoangNgay
+state "Hiển thị GD TK mặt hàng theo doanh thu" as HienThiGDTKMatHangDoanhThu
+state "Hiển thị GD chi tiết giao dịch mặt hàng" as HienThiGDChiTietGiaoDichMH
+
+HienThiGDChinhQL -down-> HienThiGDChonLoaiTK : Chọn menu xem báo cáo
+HienThiGDChonLoaiTK -up-> HienThiGDChinhQL : Chọn quay lại
+
+HienThiGDChonLoaiTK -down-> HienThiGDChonKhoangNgay : Chọn TK mặt hàng theo doanh thu
+HienThiGDChonKhoangNgay -up-> HienThiGDChonLoaiTK : Chọn quay lại
+
+HienThiGDChonKhoangNgay -down-> HienThiGDTKMatHangDoanhThu : Nhập khoảng ngày và nhấn xem
+HienThiGDTKMatHangDoanhThu -up-> HienThiGDChonKhoangNgay : Chọn quay lại
+
+HienThiGDChonKhoangNgay -up-> HienThiGDChonKhoangNgay : Khoảng ngày
+không hợp lệ
+
+HienThiGDTKMatHangDoanhThu -down-> HienThiGDChiTietGiaoDichMH : Click vào 1 mặt hàng
+HienThiGDChiTietGiaoDichMH -up-> HienThiGDTKMatHangDoanhThu : Chọn quay lại
+@enduml
+```
+
+## 9. Hình 3.5: Sơ đồ giao tiếp module Đăng ký thành viên
+*Tệp nguồn: `tuan3_hinh3_5_comm_register_member.puml`*
+
+```plantuml
+@startuml
+skinparam linetype polyline
+
+actor "Customer" as Customer
+boundary "CustomerHomeFrm2" as CustomerHomeFrm2
+boundary "RegisterMemberFrm2" as RegisterMemberFrm2
+boundary "LoginFrm2" as LoginFrm2
+entity "Customer2" as Customer2
+
+' 1. Mở giao diện đăng kí
+Customer -down- CustomerHomeFrm2 : 1: chọn đăng kí thành viên ↓
+CustomerHomeFrm2 -right- RegisterMemberFrm2 : 2: gọi →
+
+' 2. Nhập thông tin cá nhân
+Customer -down- RegisterMemberFrm2 : 3: hiển thị ↑
+4: nhập thông tin và click đăng kí ↓
+11: báo thành công ↑
+
+' 3. Kiểm tra trùng lặp và lưu CSDL
+RegisterMemberFrm2 -down- Customer2 : 5: gọi ↓
+7: trả về hợp lệ ↑
+8: gọi ↓
+10: trả về thành công ↑
+Customer2 -down-> Customer2 : 6: checkExistingMember(
+username, email)
+9: saveCustomer()
+
+' 4. Chuyển sang giao diện đăng nhập
+RegisterMemberFrm2 -right- LoginFrm2 : 12: gọi →
+Customer -down- LoginFrm2 : 13: hiển thị ↑
+@enduml
+```
+
+## 10. Hình 3.6: Sơ đồ giao tiếp module Thống kê mặt hàng theo doanh thu
+*Tệp nguồn: `tuan3_hinh3_6_comm_item_revenue_stat.puml`*
+
+```plantuml
+@startuml
+skinparam linetype polyline
+
+actor "Manager" as Manager
+boundary "ManagerHomeFrm2" as ManagerHomeFrm2
+boundary "SelectStatTypeFrm2" as SelectStatTypeFrm2
+boundary "SelectDateRangeFrm2" as SelectDateRangeFrm2
+boundary "ItemRevenueStatFrm2" as ItemRevenueStatFrm2
+boundary "ItemTransactionDetailFrm2" as ItemTransactionDetailFrm2
+entity "ItemRevenueStat2" as ItemRevenueStat2
+entity "InvoiceDetail2" as InvoiceDetail2
+
+' 1. Khởi tạo từ màn hình chính
+Manager -down- ManagerHomeFrm2 : 1: chọn xem thống kê ↓
+ManagerHomeFrm2 -right- SelectStatTypeFrm2 : 2: gọi →
+
+' 2. Chọn kiểu thống kê
+Manager -down- SelectStatTypeFrm2 : 3: hiển thị ↑
+4: chọn TK mặt hàng
+theo doanh thu ↓
+SelectStatTypeFrm2 -right- SelectDateRangeFrm2 : 5: gọi →
+
+' 3. Chọn khoảng thời gian
+Manager -down- SelectDateRangeFrm2 : 6: hiển thị ↑
+7: chọn khoảng ngày
+và click xem ↓
+SelectDateRangeFrm2 -right- ItemRevenueStatFrm2 : 8: gọi →
+
+' 4. Truy vấn thống kê doanh thu mặt hàng
+ItemRevenueStatFrm2 -down- ItemRevenueStat2 : 9: gọi ↓
+11: trả về ↑
+ItemRevenueStat2 -down-> ItemRevenueStat2 : 10: getItemRevenueStat()
+
+' 5. Hiển thị bảng thống kê & chọn 1 mặt hàng
+Manager -down- ItemRevenueStatFrm2 : 12: hiển thị ↑
+13: chọn 1 mặt hàng ↓
+ItemRevenueStatFrm2 -right- ItemTransactionDetailFrm2 : 14: gọi →
+
+' 6. Truy vấn chi tiết giao dịch của mặt hàng
+ItemTransactionDetailFrm2 -down- InvoiceDetail2 : 15: gọi ↓
+17: trả về ↑
+InvoiceDetail2 -down-> InvoiceDetail2 : 16: getItemTransactionDetails()
+
+' 7. Hiển thị chi tiết giao dịch cho quản lí
+Manager -down- ItemTransactionDetailFrm2 : 18: hiển thị ↑
+@enduml
+```
+
+## 11. Hình 4.1: Sơ đồ thiết kế lớp thực thể
+*Tệp nguồn: `tuan4_hinh4_1_design_entity_class.puml`*
+
+```plantuml
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+abstract class "Member2" as Member2 {
+  -id: integer
+  -username: String
+  -password: String
+  -fullName: String
+  -address: String
+  -email: String
+  -phone: String
+}
+
+class Customer2 {
+  -customerCode: String
+}
+
+class CustomerStat2 {
+  -totalInvoices: integer
+  -totalAmount: float
+}
+
+abstract class "Employee2" as Employee2 {
+  -employeeCode: String
+  -position: String
+}
+
+class SalesStaff2
+class Manager2
+
+class Supplier2 {
+  -id: integer
+  -supplierCode: String
+  -name: String
+  -address: String
+  -phone: String
+  -email: String
+  -description: String
+}
+
+class SupplierStat2 {
+  -totalImports: integer
+  -totalImportValue: float
+}
+
+class Item2 {
+  -id: integer
+  -itemCode: String
+  -name: String
+  -unit: String
+  -price: float
+  -stockQuantity: integer
+  -description: String
+}
+
+class ItemRevenueStat2 {
+  -totalQuantitySold: integer
+  -totalRevenue: float
+}
+
+class ItemImportStat2 {
+  -totalQuantityImported: integer
+  -totalImportAmount: float
+}
+
+class Invoice2 {
+  -id: integer
+  -invoiceCode: String
+  -createdDate: Date
+  -deliveryAddress: String
+  -totalAmount: float
+  -status: String
+  -deliveryStaffName: String
+  -customer: Customer2
+  -salesStaff: SalesStaff2
+  -listInvoiceDetail: InvoiceDetail2[]
+}
+
+class InvoiceDetail2 {
+  -id: integer
+  -quantity: integer
+  -unitPrice: float
+  -item: Item2
+  -invoice: Invoice2
+}
+
+class ImportReceipt2 {
+  -id: integer
+  -receiptCode: String
+  -importDate: Date
+  -totalAmount: float
+  -manager: Manager2
+  -supplier: Supplier2
+  -listImportReceiptDetail: ImportReceiptDetail2[]
+}
+
+class ImportReceiptDetail2 {
+  -id: integer
+  -quantity: integer
+  -importPrice: float
+  -item: Item2
+  -importReceipt: ImportReceipt2
+}
+
+' 1. Quan hệ kế thừa (Generalization)
+Member2 <|-- Customer2
+Member2 <|-- Employee2
+Customer2 <|-- CustomerStat2
+Employee2 <|-- SalesStaff2
+Employee2 <|-- Manager2
+Supplier2 <|-- SupplierStat2
+Item2 <|-- ItemRevenueStat2
+Item2 <|-- ItemImportStat2
+
+' 2. Quan hệ hợp thành (Aggregation) và gắn chặt (Composition)
+Customer2 --o Invoice2
+SalesStaff2 --o Invoice2
+InvoiceDetail2 --* Invoice2
+Item2 --o InvoiceDetail2
+
+Manager2 --o ImportReceipt2
+Supplier2 --o ImportReceipt2
+ImportReceiptDetail2 --* ImportReceipt2
+Item2 --o ImportReceiptDetail2
+@enduml
+```
+
+## 12. Hình 4.2: Sơ đồ thiết kế cơ sở dữ liệu (Database Schema / ERD)
+*Tệp nguồn: `tuan4_hinh4_2_database_schema_erd.puml`*
+
+```plantuml
+@startuml
+skinparam linetype ortho
+hide circle
+
+entity "tblMember2" as tblMember2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * username : varchar(255) <<UQ>>
+  * password : varchar(255)
+  * fullName : varchar(255)
+  * address : varchar(255)
+  * email : varchar(255) <<UQ>>
+  * phone : varchar(50)
+}
+
+entity "tblCustomer2" as tblCustomer2 {
+  * **tblMember2id** : integer(10) <<PK, FK>>
+  --
+  * customerCode : varchar(50) <<UQ>>
+}
+
+entity "tblEmployee2" as tblEmployee2 {
+  * **tblMember2id** : integer(10) <<PK, FK>>
+  --
+  * employeeCode : varchar(50) <<UQ>>
+  * position : varchar(50)
+}
+
+entity "tblSupplier2" as tblSupplier2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * supplierCode : varchar(50) <<UQ>>
+  * name : varchar(255)
+  * address : varchar(255)
+  * phone : varchar(50)
+  * email : varchar(255)
+    description : varchar(255)
+}
+
+entity "tblItem2" as tblItem2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * itemCode : varchar(50) <<UQ>>
+  * name : varchar(255)
+  * unit : varchar(50)
+  * price : float(10)
+  * stockQuantity : integer(10)
+    description : varchar(255)
+}
+
+entity "tblInvoice2" as tblInvoice2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * invoiceCode : varchar(50) <<UQ>>
+  * createdDate : date
+  * deliveryAddress : varchar(255)
+  * status : varchar(50)
+    deliveryStaffName : varchar(255)
+  * tblCustomer2id : integer(10) <<FK>>
+    tblEmployee2id : integer(10) <<FK>>
+}
+
+entity "tblInvoiceDetail2" as tblInvoiceDetail2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * quantity : integer(10)
+  * unitPrice : float(10)
+  * tblInvoice2id : integer(10) <<FK>>
+  * tblItem2id : integer(10) <<FK>>
+}
+
+entity "tblImportReceipt2" as tblImportReceipt2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * receiptCode : varchar(50) <<UQ>>
+  * importDate : date
+  * tblEmployee2id : integer(10) <<FK>>
+  * tblSupplier2id : integer(10) <<FK>>
+}
+
+entity "tblImportReceiptDetail2" as tblImportReceiptDetail2 {
+  * **id** : integer(10) <<PK>>
+  --
+  * quantity : integer(10)
+  * importPrice : float(10)
+  * tblImportReceipt2id : integer(10) <<FK>>
+  * tblItem2id : integer(10) <<FK>>
+}
+
+' Quan hệ kế thừa (1 - 0..1)
+tblMember2 ||--o| tblCustomer2
+tblMember2 ||--o| tblEmployee2
+
+' Quan hệ hóa đơn bán hàng
+tblCustomer2 ||--o{ tblInvoice2
+tblEmployee2 |o--o{ tblInvoice2
+tblInvoice2 ||--|{ tblInvoiceDetail2
+tblItem2 ||--o{ tblInvoiceDetail2
+
+' Quan hệ phiếu nhập hàng
+tblEmployee2 ||--o{ tblImportReceipt2
+tblSupplier2 ||--o{ tblImportReceipt2
+tblImportReceipt2 ||--|{ tblImportReceiptDetail2
+tblItem2 ||--o{ tblImportReceiptDetail2
+@enduml
+```
+
+## 13. Hình 5.2: Biểu đồ lớp thiết kế module Đăng ký thành viên
+*Tệp nguồn: `tuan5_hinh5_2_class_design_register_member.puml`*
+
+```plantuml
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+' Tầng giao diện (View - JSP)
+class "CustomerHomeFrm2.jsp" as CustomerHomeFrm2_jsp {
+  -subRegister: link
+}
+
+class "RegisterMemberFrm2.jsp" as RegisterMemberFrm2_jsp {
+  -inFullName: Text
+  -inUsername: Text
+  -inPassword: Password
+  -inPhone: Text
+  -inEmail: Text
+  -inAddress: Text
+  -outMessage: String
+  -subRegister: submit
+  -subBack: link
+  -customer: Customer2
+}
+
+class "doRegisterMember2.jsp" as doRegisterMember2_jsp {
+  -customer: Customer2
+}
+
+class "LoginFrm2.jsp" as LoginFrm2_jsp
+
+' Tầng truy xuất dữ liệu (DAO)
+class DAO2 {
+  -con: Connection
+  +DAO2()
+}
+
+class MemberDAO2 {
+  +MemberDAO2()
+  +checkExistingMember(username: String, email: String): boolean
+}
+
+class CustomerDAO2 {
+  +CustomerDAO2()
+  +saveCustomer(customer: Customer2): boolean
+}
+
+' Tầng thực thể (Model)
+abstract class "Member2" as Member2 {
+  -id: integer
+  -username: String
+  -password: String
+  -fullName: String
+  -address: String
+  -email: String
+  -phone: String
+}
+
+class Customer2 {
+  -customerCode: String
+}
+
+' Luồng chuyển giao diện
+CustomerHomeFrm2_jsp -right- RegisterMemberFrm2_jsp
+RegisterMemberFrm2_jsp -down- doRegisterMember2_jsp
+doRegisterMember2_jsp -right- LoginFrm2_jsp
+CustomerHomeFrm2_jsp -[hidden]down- DAO2
+
+' Quan hệ View - DAO
+doRegisterMember2_jsp -- MemberDAO2
+doRegisterMember2_jsp -- CustomerDAO2
+
+' Quan hệ kế thừa DAO
+DAO2 <|-- MemberDAO2
+DAO2 <|-- CustomerDAO2
+
+' Quan hệ DAO - Model và kế thừa Model
+MemberDAO2 -- Member2
+CustomerDAO2 -- Customer2
+Member2 <|-- Customer2
+@enduml
+```
+
+## 14. Hình 5.4: Biểu đồ lớp thiết kế module Thống kê mặt hàng theo doanh thu
+*Tệp nguồn: `tuan5_hinh5_4_class_design_item_revenue_stat.puml`*
+
+```plantuml
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+' Hàng 1: Giao diện điều hướng
+class "ManagerHomeFrm2.jsp" as ManagerHomeFrm2_jsp {
+  -subViewStatistics: link
+  -manager: Manager2
+}
+
+class "SelectStatTypeFrm2.jsp" as SelectStatTypeFrm2_jsp {
+  -inoutStatType: Select
+  -subSelect: submit
+  -subBack: link
+  -manager: Manager2
+}
+
+class "SelectDateRangeFrm2.jsp" as SelectDateRangeFrm2_jsp {
+  -inStartDate: Text
+  -inEndDate: Text
+  -outMessage: String
+  -subViewStat: submit
+  -subBack: link
+  -manager: Manager2
+}
+
+' Hàng 2: Giao diện báo cáo thống kê
+class "ItemRevenueStatFrm2.jsp" as ItemRevenueStatFrm2_jsp {
+  -listItemRevenueStat: ItemRevenueStat2[]
+  -outsubItemRevenueStatList: Table
+  -subSelectItem: link
+  -outMessage: String
+  -subBack: link
+  -startDate: Date
+  -endDate: Date
+  -manager: Manager2
+}
+
+class "ItemTransactionDetailFrm2.jsp" as ItemTransactionDetailFrm2_jsp {
+  -listTransactionDetail: InvoiceDetail2[]
+  -outTransactionDetailList: Table
+  -outItemName: String
+  -outDateRange: String
+  -outTotalQuantity: integer
+  -outTotalRevenue: float
+  -subBack: link
+  -item: Item2
+  -startDate: Date
+  -endDate: Date
+  -manager: Manager2
+}
+
+' Hàng 3: Tầng truy xuất dữ liệu (DAO)
+class ItemRevenueStatDAO2 {
+  +ItemRevenueStatDAO2()
+  +getItemRevenueStat(startDate: Date, endDate: Date): ItemRevenueStat2[]
+}
+
+class DAO2 {
+  -con: Connection
+  +DAO2()
+}
+
+class InvoiceDetailDAO2 {
+  +InvoiceDetailDAO2()
+  +getItemTransactionDetails(itemCode: String, startDate: Date, endDate: Date): InvoiceDetail2[]
+}
+
+' Hàng 4: Lớp thống kê mặt hàng & Chi tiết hóa đơn
+class ItemRevenueStat2 {
+  -totalQuantitySold: integer
+  -totalRevenue: float
+}
+
+class InvoiceDetail2 {
+  -id: integer
+  -quantity: integer
+  -unitPrice: float
+  -item: Item2
+  -invoice: Invoice2
+}
+
+' Hàng 5: Lớp mặt hàng & Hóa đơn
+class Item2 {
+  -id: integer
+  -itemCode: String
+  -name: String
+  -unit: String
+  -price: float
+  -stockQuantity: integer
+  -description: String
+}
+
+class Invoice2 {
+  -id: integer
+  -invoiceCode: String
+  -createdDate: Date
+  -deliveryAddress: String
+  -totalAmount: float
+  -status: String
+  -deliveryStaffName: String
+  -customer: Customer2
+  -salesStaff: SalesStaff2
+  -listInvoiceDetail: InvoiceDetail2[]
+}
+
+' Khối phân quyền người dùng
+abstract class "Member2" as Member2 {
+  -id: integer
+  -username: String
+  -password: String
+  -fullName: String
+  -address: String
+  -email: String
+  -phone: String
+}
+
+class Customer2 {
+  -customerCode: String
+}
+
+abstract class "Employee2" as Employee2 {
+  -employeeCode: String
+  -position: String
+}
+
+class SalesStaff2
+class Manager2
+
+' 1. Điều hướng JSP
+ManagerHomeFrm2_jsp -right- SelectStatTypeFrm2_jsp
+SelectStatTypeFrm2_jsp -right- SelectDateRangeFrm2_jsp
+SelectDateRangeFrm2_jsp -down- ItemRevenueStatFrm2_jsp
+ItemRevenueStatFrm2_jsp -right- ItemTransactionDetailFrm2_jsp
+
+' 2. View nối DAO
+ItemRevenueStatFrm2_jsp -down- ItemRevenueStatDAO2
+ItemTransactionDetailFrm2_jsp -down- InvoiceDetailDAO2
+
+' 3. Kế thừa DAO về DAO2 ở giữa
+ItemRevenueStatDAO2 -right-|> DAO2
+InvoiceDetailDAO2 -left-|> DAO2
+
+' 4. DAO xuống Model
+ItemRevenueStatDAO2 -down- ItemRevenueStat2
+InvoiceDetailDAO2 -down- InvoiceDetail2
+
+' 5. Model quan hệ
+ItemRevenueStat2 -down-|> Item2
+Item2 -right-o InvoiceDetail2
+InvoiceDetail2 -down-* Invoice2
+
+Customer2 -down-o Invoice2
+SalesStaff2 -down-o Invoice2
+
+Member2 <|-- Customer2
+Member2 <|-- Employee2
+Employee2 <|-- SalesStaff2
+Employee2 <|-- Manager2
+
+' Ràng buộc vị trí cân đối
+ItemRevenueStatDAO2 -[hidden]right- DAO2
+DAO2 -[hidden]right- InvoiceDetailDAO2
+
+ItemRevenueStat2 -[hidden]right- InvoiceDetail2
+Item2 -[hidden]right- Invoice2
+Invoice2 -[hidden]right- Customer2
+Customer2 -[hidden]right- SalesStaff2
+@enduml
+```
+
+## 15. Hình 6.1: Biểu đồ hoạt động thiết kế module Đăng ký thành viên
+*Tệp nguồn: `tuan6_hinh6_1_activity_register_member.puml`*
+
+```plantuml
+@startuml
+start
+
+partition "Xử lí tại CustomerHomeFrm2.jsp" {
+  :Nhận TT KH;
+  :Hiển thị GD;
+}
+
+-> [click đăng kí thành viên];
+
+partition "Xử lí tại RegisterMemberFrm2.jsp" {
+  :Hiển thị GD;
+  :Nhập TT cá nhân & click đăng kí;
+  :Kiểm tra dữ liệu client;
+}
+
+-> [gửi request];
+
+partition "Xử lí tại doRegisterMember2.jsp" {
+  :Nhận TT KH;
+  :Kiểm tra dữ liệu server;
+}
+
+-> [yêu cầu kiểm tra trùng];
+:MemberDAO2: checkExistingMember();
+-> [kết quả: hợp lệ / chưa tồn tại];
+
+partition "Xử lí tại doRegisterMember2.jsp" {
+  :Đóng gói đối tượng Customer2;
+}
+
+-> [yêu cầu lưu dữ liệu];
+:CustomerDAO2: saveCustomer();
+-> [kết quả: lưu thành công];
+
+partition "Xử lí tại doRegisterMember2.jsp" {
+  :Chuyển hướng (redirect);
+}
+
+-> [redirect];
+
+partition "Xử lí tại LoginFrm2.jsp" {
+  :Hiển thị GD đăng nhập\nkèm thông báo thành công;
+}
+
+stop
+@enduml
+```
+
+## 16. Hình 6.2: Biểu đồ tuần tự thiết kế module Đăng ký thành viên
+*Tệp nguồn: `tuan6_hinh6_2_sequence_register_member.puml`*
+
+```plantuml
+@startuml
+autonumber
+skinparam sequenceMessageAlign center
+
+actor "Customer" as Customer
+boundary "CustomerHomeFrm2.jsp" as HomeFrm
+boundary "RegisterMemberFrm2.jsp" as RegFrm
+boundary "doRegisterMember2.jsp" as DoReg
+control "MemberDAO2" as MemberDAO
+control "CustomerDAO2" as CustomerDAO
+entity "Customer2" as CustomerEntity
+boundary "LoginFrm2.jsp" as LoginFrm
+
+activate Customer
+Customer -> HomeFrm : chọn đăng kí thành viên
+activate HomeFrm
+HomeFrm -> RegFrm : gọi
+deactivate HomeFrm
+activate RegFrm
+RegFrm --> Customer : hiển thị
+Customer -> RegFrm : nhập thông tin và click đăng kí
+RegFrm -> DoReg : gọi
+deactivate RegFrm
+activate DoReg
+
+DoReg -> MemberDAO : gọi
+activate MemberDAO
+MemberDAO -> MemberDAO : checkExistingMember()
+MemberDAO --> DoReg : trả về
+deactivate MemberDAO
+
+DoReg -> CustomerEntity : gọi
+activate CustomerEntity
+CustomerEntity -> CustomerEntity : Customer2()
+CustomerEntity --> DoReg : trả về
+deactivate CustomerEntity
+
+DoReg -> CustomerDAO : gọi
+activate CustomerDAO
+CustomerDAO -> CustomerDAO : saveCustomer()
+CustomerDAO --> DoReg : trả về
+deactivate CustomerDAO
+
+DoReg -> LoginFrm : gọi (redirect kèm thông báo)
+deactivate DoReg
+activate LoginFrm
+LoginFrm --> Customer : hiển thị GD đăng nhập kèm thông báo
+deactivate LoginFrm
+deactivate Customer
+@enduml
+```
+
+## 17. Hình 6.3: Biểu đồ hoạt động thiết kế module Thống kê mặt hàng theo doanh thu
+*Tệp nguồn: `tuan6_hinh6_3_activity_item_revenue_stat.puml`*
+
+```plantuml
+@startuml
+start
+
+partition "Xử lí tại ManagerHomeFrm2.jsp" {
+  :Nhận thông tin QL;
+  :Hiển thị GD;
+}
+
+-> [click xem báo cáo];
+
+partition "Xử lí tại SelectStatTypeFrm2.jsp" {
+  :Nhận thông tin QL;
+  :Hiển thị GD;
+}
+
+-> [chọn TK mặt hàng theo doanh thu];
+
+partition "Xử lí tại SelectDateRangeFrm2.jsp" {
+  :Nhận thông tin QL;
+  :Hiển thị GD;
+  :Nhập khoảng ngày & click xem;
+  :Kiểm tra khoảng ngày;
+}
+
+-> [gửi khoảng ngày];
+
+partition "Xử lí tại ItemRevenueStatFrm2.jsp" {
+  :Nhận TT QL & khoảng ngày;
+}
+
+-> [yêu cầu thống kê doanh thu];
+:ItemRevenueStatDAO2: getItemRevenueStat();
+-> [danh sách thống kê doanh thu MH];
+
+partition "Xử lí tại ItemRevenueStatFrm2.jsp" {
+  :Hiển thị GD (bảng TK doanh thu);
+}
+
+-> [click chọn 1 mặt hàng];
+
+partition "Xử lí tại ItemTransactionDetailFrm2.jsp" {
+  :Nhận TT MH & khoảng ngày;
+}
+
+-> [yêu cầu chi tiết giao dịch];
+:InvoiceDetailDAO2: getItemTransactionDetails();
+-> [danh sách chi tiết giao dịch MH];
+
+partition "Xử lí tại ItemTransactionDetailFrm2.jsp" {
+  :Hiển thị GD (chi tiết giao dịch);
+}
+
+stop
+@enduml
+```
+
+## 18. Hình 6.4: Biểu đồ tuần tự thiết kế module Thống kê mặt hàng theo doanh thu
+*Tệp nguồn: `tuan6_hinh6_4_sequence_item_revenue_stat.puml`*
+
+```plantuml
+@startuml
+autonumber
+skinparam sequenceMessageAlign center
+
+actor "Manager" as Manager
+boundary "ManagerHomeFrm2.jsp" as HomeFrm
+boundary "SelectStatTypeFrm2.jsp" as TypeFrm
+boundary "SelectDateRangeFrm2.jsp" as DateFrm
+boundary "ItemRevenueStatFrm2.jsp" as StatFrm
+boundary "ItemTransactionDetailFrm2.jsp" as DetailFrm
+control "ItemRevenueStatDAO2" as StatDAO
+control "InvoiceDetailDAO2" as DetailDAO
+entity "ItemRevenueStat2" as StatEntity
+entity "InvoiceDetail2" as DetailEntity
+
+activate Manager
+Manager -> HomeFrm : chọn xem thống kê
+activate HomeFrm
+HomeFrm -> TypeFrm : gọi
+deactivate HomeFrm
+activate TypeFrm
+TypeFrm --> Manager : hiển thị
+Manager -> TypeFrm : chọn TK mặt hàng theo doanh thu
+TypeFrm -> DateFrm : gọi
+deactivate TypeFrm
+activate DateFrm
+DateFrm --> Manager : hiển thị
+Manager -> DateFrm : chọn khoảng ngày và click xem
+DateFrm -> StatFrm : gọi
+deactivate DateFrm
+activate StatFrm
+
+StatFrm -> StatDAO : gọi
+activate StatDAO
+StatDAO -> StatDAO : getItemRevenueStat()
+StatDAO -> StatEntity : gọi
+activate StatEntity
+StatEntity -> StatEntity : ItemRevenueStat2()
+StatEntity --> StatDAO : trả về
+deactivate StatEntity
+StatDAO --> StatFrm : trả về
+deactivate StatDAO
+
+StatFrm --> Manager : hiển thị
+Manager -> StatFrm : chọn 1 mặt hàng
+StatFrm -> DetailFrm : gọi
+deactivate StatFrm
+activate DetailFrm
+
+DetailFrm -> DetailDAO : gọi
+activate DetailDAO
+DetailDAO -> DetailDAO : getItemTransactionDetails()
+DetailDAO -> DetailEntity : gọi
+activate DetailEntity
+DetailEntity -> DetailEntity : InvoiceDetail2()
+DetailEntity --> DetailDAO : trả về
+deactivate DetailEntity
+DetailDAO --> DetailFrm : trả về
+deactivate DetailDAO
+
+DetailFrm --> Manager : hiển thị
+deactivate DetailFrm
+deactivate Manager
+@enduml
+```
+
+## 19. Hình 6.5: Biểu đồ thiết kế gói của hệ thống ShopMan
+*Tệp nguồn: `tuan6_hinh6_5_package_diagram.puml`*
+
+```plantuml
+@startuml
+skinparam packageStyle rectangle
+
+package "view" {
+  package "thanhvien" as tv {
+  }
+  package "khachhang" as kh {
+  }
+  package "nhanvienbanhang" as nv {
+  }
+  package "quanli" as ql {
+  }
+}
+
+package "dao" as dao {
+}
+
+package "model" as model {
+}
+
+view -down- dao
+dao -down- model
+@enduml
+```
+
+## 20. Hình 6.6: Biểu đồ triển khai của hệ thống ShopMan
+*Tệp nguồn: `tuan6_hinh6_6_deployment_diagram.puml`*
+
+```plantuml
+@startuml
+left to right direction
+
+node "<<device>>\nClient Machine" as Client {
+  artifact "Web Browser\n(Chrome / Edge / Firefox)" as Browser
+}
+
+node "<<device>>\nWeb Application Server" as AppServer {
+  artifact "ShopMan2.war\n(view, dao, model)\n[Apache Tomcat 9]" as War
+}
+
+node "<<device>>\nDatabase Server" as DBServer {
+  database "db_shopman2\n(MySQL DBMS)" as DB
+}
+
+Client -- AppServer : <<HTTP / HTTPS>>
+AppServer -- DBServer : <<JDBC / TCP-IP>>
+@enduml
+```
+
+# PHỤ LỤC THAM KHẢO: BIỂU ĐỒ TUẦN TỰ PHA PHÂN TÍCH (TUẦN 3)
+> Bổ trợ tham khảo cho pha phân tích, chuẩn hóa mũi tên phản hồi nét đứt `-->`.
+
+## Phụ lục: Biểu đồ tuần tự pha phân tích - Đăng ký thành viên
+*Tệp nguồn: `phu_luc_tuan3_sequence_register_member.puml`*
+
+```plantuml
+@startuml
+autonumber
+
+actor Customer
+participant CustomerHomeFrm2
+participant RegisterMemberFrm2
+participant LoginFrm2
+participant Customer2
+
+Customer -> CustomerHomeFrm2 : chọn đăng kí thành viên
+CustomerHomeFrm2 -> RegisterMemberFrm2 : gọi
+RegisterMemberFrm2 --> Customer : hiển thị
+Customer -> RegisterMemberFrm2 : nhập thông tin và click đăng kí
+RegisterMemberFrm2 -> Customer2 : gọi
+Customer2 -> Customer2 : checkExistingMember()
+Customer2 --> RegisterMemberFrm2 : trả về hợp lệ
+RegisterMemberFrm2 -> Customer2 : gọi
+Customer2 -> Customer2 : saveCustomer()
+Customer2 --> RegisterMemberFrm2 : trả về thành công
+RegisterMemberFrm2 --> Customer : báo thành công
+RegisterMemberFrm2 -> LoginFrm2 : gọi
+LoginFrm2 --> Customer : hiển thị
+@enduml
+```
+
+## Phụ lục: Biểu đồ tuần tự pha phân tích - Thống kê mặt hàng theo doanh thu
+*Tệp nguồn: `phu_luc_tuan3_sequence_item_revenue_stat.puml`*
+
+```plantuml
+@startuml
+autonumber
+
+actor Manager
+participant ManagerHomeFrm2
+participant SelectStatTypeFrm2
+participant SelectDateRangeFrm2
+participant ItemRevenueStatFrm2
+participant ItemTransactionDetailFrm2
+participant ItemRevenueStat2
+participant InvoiceDetail2
+
+Manager -> ManagerHomeFrm2 : chọn xem thống kê
+ManagerHomeFrm2 -> SelectStatTypeFrm2 : gọi
+SelectStatTypeFrm2 --> Manager : hiển thị
+Manager -> SelectStatTypeFrm2 : chọn TK mặt hàng theo doanh thu
+SelectStatTypeFrm2 -> SelectDateRangeFrm2 : gọi
+SelectDateRangeFrm2 --> Manager : hiển thị
+Manager -> SelectDateRangeFrm2 : chọn khoảng ngày và click xem
+SelectDateRangeFrm2 -> ItemRevenueStatFrm2 : gọi
+ItemRevenueStatFrm2 -> ItemRevenueStat2 : gọi
+ItemRevenueStat2 -> ItemRevenueStat2 : getItemRevenueStat()
+ItemRevenueStat2 --> ItemRevenueStatFrm2 : trả về
+ItemRevenueStatFrm2 --> Manager : hiển thị
+Manager -> ItemRevenueStatFrm2 : chọn 1 mặt hàng
+ItemRevenueStatFrm2 -> ItemTransactionDetailFrm2 : gọi
+ItemTransactionDetailFrm2 -> InvoiceDetail2 : gọi
+InvoiceDetail2 -> InvoiceDetail2 : getItemTransactionDetails()
+InvoiceDetail2 --> ItemTransactionDetailFrm2 : trả về
+ItemTransactionDetailFrm2 --> Manager : hiển thị
+@enduml
+```

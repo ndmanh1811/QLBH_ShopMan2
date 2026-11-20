@@ -1,0 +1,47 @@
+@startuml
+start
+
+partition "Xử lí tại CustomerHomeFrm2.jsp" {
+  :Nhận TT KH;
+  :Hiển thị GD;
+}
+
+-> [click đăng kí thành viên];
+
+partition "Xử lí tại RegisterMemberFrm2.jsp" {
+  :Hiển thị GD;
+  :Nhập TT cá nhân & click đăng kí;
+  :Kiểm tra dữ liệu client;
+}
+
+-> [gửi request];
+
+partition "Xử lí tại doRegisterMember2.jsp" {
+  :Nhận TT KH;
+  :Kiểm tra dữ liệu server;
+}
+
+-> [yêu cầu kiểm tra trùng];
+:MemberDAO2: checkExistingMember();
+-> [kết quả: hợp lệ / chưa tồn tại];
+
+partition "Xử lí tại doRegisterMember2.jsp" {
+  :Đóng gói đối tượng Customer2;
+}
+
+-> [yêu cầu lưu dữ liệu];
+:CustomerDAO2: saveCustomer();
+-> [kết quả: lưu thành công];
+
+partition "Xử lí tại doRegisterMember2.jsp" {
+  :Chuyển hướng (redirect);
+}
+
+-> [redirect];
+
+partition "Xử lí tại LoginFrm2.jsp" {
+  :Hiển thị GD đăng nhập\nkèm thông báo thành công;
+}
+
+stop
+@enduml

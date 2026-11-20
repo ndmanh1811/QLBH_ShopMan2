@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+
+actor "Member" as Member
+actor "Employee" as Employee
+actor "Manager" as Manager
+
+Employee --|> Member
+Manager --|> Employee
+
+rectangle "Module 2: Item Statistics By Revenue" {
+  usecase "Login 2" as UC_Login
+  usecase "Manager Login 2" as UC_MgrLogin
+  usecase "View Statistics 2" as UC_ViewStat
+  usecase "View Item Statistics By Revenue 2" as UC_ItemRev
+  usecase "Select Statistics Date Range 2" as UC_DateRange
+  usecase "View Item Transaction Details 2" as UC_TransDetail
+}
+
+Member -- UC_Login
+UC_MgrLogin --|> UC_Login
+
+Manager -- UC_ViewStat
+UC_ViewStat ..> UC_MgrLogin : <<include>>
+
+UC_ItemRev ..> UC_ViewStat : <<extend>>
+UC_ItemRev ..> UC_DateRange : <<include>>
+UC_TransDetail ..> UC_ItemRev : <<extend>>
+@enduml

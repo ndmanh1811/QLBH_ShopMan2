@@ -1,0 +1,50 @@
+@startuml
+autonumber
+skinparam sequenceMessageAlign center
+
+actor "Customer" as Customer
+boundary "CustomerHomeFrm2.jsp" as HomeFrm
+boundary "RegisterMemberFrm2.jsp" as RegFrm
+boundary "doRegisterMember2.jsp" as DoReg
+control "MemberDAO2" as MemberDAO
+control "CustomerDAO2" as CustomerDAO
+entity "Customer2" as CustomerEntity
+boundary "LoginFrm2.jsp" as LoginFrm
+
+activate Customer
+Customer -> HomeFrm : chọn đăng kí thành viên
+activate HomeFrm
+HomeFrm -> RegFrm : gọi
+deactivate HomeFrm
+activate RegFrm
+RegFrm --> Customer : hiển thị
+Customer -> RegFrm : nhập thông tin và click đăng kí
+RegFrm -> DoReg : gọi
+deactivate RegFrm
+activate DoReg
+
+DoReg -> MemberDAO : gọi
+activate MemberDAO
+MemberDAO -> MemberDAO : checkExistingMember()
+MemberDAO --> DoReg : trả về
+deactivate MemberDAO
+
+DoReg -> CustomerEntity : gọi
+activate CustomerEntity
+CustomerEntity -> CustomerEntity : Customer2()
+CustomerEntity --> DoReg : trả về
+deactivate CustomerEntity
+
+DoReg -> CustomerDAO : gọi
+activate CustomerDAO
+CustomerDAO -> CustomerDAO : saveCustomer()
+CustomerDAO --> DoReg : trả về
+deactivate CustomerDAO
+
+DoReg -> LoginFrm : gọi (redirect kèm thông báo)
+deactivate DoReg
+activate LoginFrm
+LoginFrm --> Customer : hiển thị GD đăng nhập kèm thông báo
+deactivate LoginFrm
+deactivate Customer
+@enduml

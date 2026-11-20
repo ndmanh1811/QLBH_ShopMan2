@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+
+actor "Customer" as Customer
+
+rectangle "Module 1: Customer Member Registration" {
+  usecase "Register Member 2" as UC_Reg
+  usecase "Enter Personal Information 2" as UC_EnterInfo
+}
+
+Customer -- UC_Reg
+UC_Reg ..> UC_EnterInfo : <<include>>
+@enduml

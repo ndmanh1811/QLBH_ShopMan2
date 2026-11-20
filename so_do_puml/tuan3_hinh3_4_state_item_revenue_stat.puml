@@ -1,0 +1,26 @@
+@startuml
+hide empty description
+skinparam linetype ortho
+
+[*] --> HienThiGDChinhQL
+state "Hiển thị GD chính quản lí" as HienThiGDChinhQL
+state "Hiển thị GD chọn loại thống kê" as HienThiGDChonLoaiTK
+state "Hiển thị GD chọn khoảng thời gian" as HienThiGDChonKhoangNgay
+state "Hiển thị GD TK mặt hàng theo doanh thu" as HienThiGDTKMatHangDoanhThu
+state "Hiển thị GD chi tiết giao dịch mặt hàng" as HienThiGDChiTietGiaoDichMH
+
+HienThiGDChinhQL -down-> HienThiGDChonLoaiTK : Chọn menu xem báo cáo
+HienThiGDChonLoaiTK -up-> HienThiGDChinhQL : Chọn quay lại
+
+HienThiGDChonLoaiTK -down-> HienThiGDChonKhoangNgay : Chọn TK mặt hàng theo doanh thu
+HienThiGDChonKhoangNgay -up-> HienThiGDChonLoaiTK : Chọn quay lại
+
+HienThiGDChonKhoangNgay -down-> HienThiGDTKMatHangDoanhThu : Nhập khoảng ngày và nhấn xem
+HienThiGDTKMatHangDoanhThu -up-> HienThiGDChonKhoangNgay : Chọn quay lại
+
+HienThiGDChonKhoangNgay -up-> HienThiGDChonKhoangNgay : Khoảng ngày
+không hợp lệ
+
+HienThiGDTKMatHangDoanhThu -down-> HienThiGDChiTietGiaoDichMH : Click vào 1 mặt hàng
+HienThiGDChiTietGiaoDichMH -up-> HienThiGDTKMatHangDoanhThu : Chọn quay lại
+@enduml

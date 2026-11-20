@@ -1,0 +1,54 @@
+@startuml
+start
+
+partition "Xử lí tại ManagerHomeFrm2.jsp" {
+  :Nhận thông tin QL;
+  :Hiển thị GD;
+}
+
+-> [click xem báo cáo];
+
+partition "Xử lí tại SelectStatTypeFrm2.jsp" {
+  :Nhận thông tin QL;
+  :Hiển thị GD;
+}
+
+-> [chọn TK mặt hàng theo doanh thu];
+
+partition "Xử lí tại SelectDateRangeFrm2.jsp" {
+  :Nhận thông tin QL;
+  :Hiển thị GD;
+  :Nhập khoảng ngày & click xem;
+  :Kiểm tra khoảng ngày;
+}
+
+-> [gửi khoảng ngày];
+
+partition "Xử lí tại ItemRevenueStatFrm2.jsp" {
+  :Nhận TT QL & khoảng ngày;
+}
+
+-> [yêu cầu thống kê doanh thu];
+:ItemRevenueStatDAO2: getItemRevenueStat();
+-> [danh sách thống kê doanh thu MH];
+
+partition "Xử lí tại ItemRevenueStatFrm2.jsp" {
+  :Hiển thị GD (bảng TK doanh thu);
+}
+
+-> [click chọn 1 mặt hàng];
+
+partition "Xử lí tại ItemTransactionDetailFrm2.jsp" {
+  :Nhận TT MH & khoảng ngày;
+}
+
+-> [yêu cầu chi tiết giao dịch];
+:InvoiceDetailDAO2: getItemTransactionDetails();
+-> [danh sách chi tiết giao dịch MH];
+
+partition "Xử lí tại ItemTransactionDetailFrm2.jsp" {
+  :Hiển thị GD (chi tiết giao dịch);
+}
+
+stop
+@enduml

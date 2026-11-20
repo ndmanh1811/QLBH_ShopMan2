@@ -19,20 +19,17 @@ public class MemberDAO2 extends DAO2 {
      * @return true neu da ton tai (trung), false neu hop le (chua ton tai)
      */
     public boolean checkExistingMember(String username, String email) {
-        boolean existed = false;
         String sql = "SELECT id FROM tblMember2 WHERE username = ? OR email = ?";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, email);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                existed = true;
-            }
+            return rs.next();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return existed;
     }
 
     /**
@@ -42,9 +39,7 @@ public class MemberDAO2 extends DAO2 {
      * @return Doi tuong Member2 cu the (Manager2, SalesStaff2 hoac Customer2), hoac null neu sai thong tin
      */
     public Member2 checkLogin(String username, String password) {
-        if (username == null || password == null ||
-            username.contains("'") || username.contains("=") ||
-            password.contains("'") || password.contains("=")) {
+        if (username == null || password == null || username.trim().isEmpty() || password.trim().isEmpty()) {
             return null;
         }
         String sql = "SELECT m.*, c.customerCode, e.employeeCode, e.position "

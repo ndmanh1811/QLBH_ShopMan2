@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class Member2 implements Serializable {
+public abstract class Member2 implements Serializable {
     private static final long serialVersionUID = 2L;
     private int id;
     private String username;
@@ -16,16 +16,6 @@ public class Member2 implements Serializable {
     }
 
     public Member2(String username, String password, String fullName, String address, String email, String phone) {
-        this.username = username;
-        this.password = password;
-        this.fullName = fullName;
-        this.address = address;
-        this.email = email;
-        this.phone = phone;
-    }
-
-    public Member2(int id, String username, String password, String fullName, String address, String email, String phone) {
-        this.id = id;
         this.username = username;
         this.password = password;
         this.fullName = fullName;

@@ -1,0 +1,51 @@
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+' Lớp biên (Boundary)
+class CustomerHomeFrm2 {
+  -subRegister
+}
+
+class RegisterMemberFrm2 {
+  -inFullName
+  -inUsername
+  -inPassword
+  -inPhone
+  -inEmail
+  -inAddress
+  -outMessage
+  -subRegister
+  -subBack
+}
+
+class LoginFrm2
+
+' Lớp thực thể (Entity)
+abstract class "Member2" as Member2 {
+  -username
+  -password
+  -fullName
+  -address
+  -email
+  -phone
+  +checkExistingMember(username, email)
+}
+
+class Customer2 {
+  -customerCode
+  +saveCustomer()
+}
+
+' Liên kết lớp biên
+CustomerHomeFrm2 -right- RegisterMemberFrm2
+RegisterMemberFrm2 -right- LoginFrm2
+
+' Liên kết lớp biên - lớp thực thể
+RegisterMemberFrm2 -- Customer2
+
+' Quan hệ giữa các lớp thực thể
+Member2 <|-- Customer2
+@enduml

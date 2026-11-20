@@ -1,0 +1,31 @@
+@startuml
+skinparam linetype polyline
+
+actor "Customer" as Customer
+boundary "CustomerHomeFrm2" as CustomerHomeFrm2
+boundary "RegisterMemberFrm2" as RegisterMemberFrm2
+boundary "LoginFrm2" as LoginFrm2
+entity "Customer2" as Customer2
+
+' 1. Mở giao diện đăng kí
+Customer -down- CustomerHomeFrm2 : 1: chọn đăng kí thành viên ↓
+CustomerHomeFrm2 -right- RegisterMemberFrm2 : 2: gọi →
+
+' 2. Nhập thông tin cá nhân
+Customer -down- RegisterMemberFrm2 : 3: hiển thị ↑
+4: nhập thông tin và click đăng kí ↓
+11: báo thành công ↑
+
+' 3. Kiểm tra trùng lặp và lưu CSDL
+RegisterMemberFrm2 -down- Customer2 : 5: gọi ↓
+7: trả về hợp lệ ↑
+8: gọi ↓
+10: trả về thành công ↑
+Customer2 -down-> Customer2 : 6: checkExistingMember(
+username, email)
+9: saveCustomer()
+
+' 4. Chuyển sang giao diện đăng nhập
+RegisterMemberFrm2 -right- LoginFrm2 : 12: gọi →
+Customer -down- LoginFrm2 : 13: hiển thị ↑
+@enduml

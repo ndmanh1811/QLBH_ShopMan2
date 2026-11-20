@@ -22,4 +22,7 @@
 - `src/model/`: 15 lớp thực thể mang hậu tố 2
 - `src/dao/`: Lớp cơ sở `DAO2.java` và các lớp truy xuất dữ liệu `*DAO2.java`
 - `src/test/`: 11 ca kiểm thử đơn vị tự động JUnit 4
+- `so_do_puml/`: Toàn bộ 20 sơ đồ UML chuẩn PlantUML khớp 1-1 với báo cáo (Hình 1.1 đến 6.6)
+- `code.md`: Tài liệu gộp toàn bộ mã nguồn hệ thống
+- `run_test.bat`: Script tự động biên dịch và chạy 11 unit test cases JUnit 4
 - `WebContent/`: Trang chủ `index.jsp`, tài nguyên tĩnh `assets/css/style.css`, thư viện `WEB-INF/lib/` và các giao diện `view/quanli/`, `view/thanhvien/`

@@ -1,0 +1,31 @@
+@startuml
+autonumber
+
+actor Manager
+participant ManagerHomeFrm2
+participant SelectStatTypeFrm2
+participant SelectDateRangeFrm2
+participant ItemRevenueStatFrm2
+participant ItemTransactionDetailFrm2
+participant ItemRevenueStat2
+participant InvoiceDetail2
+
+Manager -> ManagerHomeFrm2 : chọn xem thống kê
+ManagerHomeFrm2 -> SelectStatTypeFrm2 : gọi
+SelectStatTypeFrm2 --> Manager : hiển thị
+Manager -> SelectStatTypeFrm2 : chọn TK mặt hàng theo doanh thu
+SelectStatTypeFrm2 -> SelectDateRangeFrm2 : gọi
+SelectDateRangeFrm2 --> Manager : hiển thị
+Manager -> SelectDateRangeFrm2 : chọn khoảng ngày và click xem
+SelectDateRangeFrm2 -> ItemRevenueStatFrm2 : gọi
+ItemRevenueStatFrm2 -> ItemRevenueStat2 : gọi
+ItemRevenueStat2 -> ItemRevenueStat2 : getItemRevenueStat()
+ItemRevenueStat2 --> ItemRevenueStatFrm2 : trả về
+ItemRevenueStatFrm2 --> Manager : hiển thị
+Manager -> ItemRevenueStatFrm2 : chọn 1 mặt hàng
+ItemRevenueStatFrm2 -> ItemTransactionDetailFrm2 : gọi
+ItemTransactionDetailFrm2 -> InvoiceDetail2 : gọi
+InvoiceDetail2 -> InvoiceDetail2 : getItemTransactionDetails()
+InvoiceDetail2 --> ItemTransactionDetailFrm2 : trả về
+ItemTransactionDetailFrm2 --> Manager : hiển thị
+@enduml

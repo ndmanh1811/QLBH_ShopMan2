@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+
+node "<<device>>\nClient Machine" as Client {
+  artifact "Web Browser\n(Chrome / Edge / Firefox)" as Browser
+}
+
+node "<<device>>\nWeb Application Server" as AppServer {
+  artifact "ShopMan2.war\n(view, dao, model)\n[Apache Tomcat 9]" as War
+}
+
+node "<<device>>\nDatabase Server" as DBServer {
+  database "db_shopman2\n(MySQL DBMS)" as DB
+}
+
+Client -- AppServer : <<HTTP / HTTPS>>
+AppServer -- DBServer : <<JDBC / TCP-IP>>
+@enduml

@@ -21,18 +21,6 @@ public class Invoice2 implements Serializable {
     public Invoice2() {
     }
 
-    public Invoice2(int id, String invoiceCode, Date createdDate, String deliveryAddress, float totalAmount, String status, String deliveryStaffName, Customer2 customer, SalesStaff2 salesStaff) {
-        this.id = id;
-        this.invoiceCode = invoiceCode;
-        this.createdDate = createdDate;
-        this.deliveryAddress = deliveryAddress;
-        this.totalAmount = totalAmount;
-        this.status = status;
-        this.deliveryStaffName = deliveryStaffName;
-        this.customer = customer;
-        this.salesStaff = salesStaff;
-    }
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

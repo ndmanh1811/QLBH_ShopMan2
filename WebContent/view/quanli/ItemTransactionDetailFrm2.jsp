@@ -17,19 +17,15 @@
     String itemCode = request.getParameter("itemCode");
     String startStr = request.getParameter("inStartDate");
     String endStr = request.getParameter("inEndDate");
-
-    if (startStr == null) startStr = request.getParameter("startDate");
-    if (endStr == null) endStr = request.getParameter("endDate");
     if (startStr == null) startStr = (String) session.getAttribute("startDateStr");
     if (endStr == null) endStr = (String) session.getAttribute("endDateStr");
 
-    Date startDate = (Date) session.getAttribute("startDate");
-    Date endDate = (Date) session.getAttribute("endDate");
-
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date startDate = null;
+    Date endDate = null;
     try {
-        if (startDate == null && startStr != null) startDate = sdf.parse(startStr.trim());
-        if (endDate == null && endStr != null) endDate = sdf.parse(endStr.trim());
+        if (startStr != null) startDate = sdf.parse(startStr.trim());
+        if (endStr != null) endDate = sdf.parse(endStr.trim());
     } catch (Exception e) {}
 
     if (itemCode == null || itemCode.trim().isEmpty() || startDate == null || endDate == null) {

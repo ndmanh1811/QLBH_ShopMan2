@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     String msg = request.getParameter("msg");
+    String err = request.getParameter("err");
     String error = request.getParameter("error");
+    if ("empty".equals(err)) error = "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!";
+    if ("fail".equals(err)) error = "Tên đăng nhập hoặc mật khẩu không chính xác!";
 %>
 <!DOCTYPE html>
 <html>

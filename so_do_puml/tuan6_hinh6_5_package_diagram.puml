@@ -1,0 +1,23 @@
+@startuml
+skinparam packageStyle rectangle
+
+package "view" {
+  package "thanhvien" as tv {
+  }
+  package "khachhang" as kh {
+  }
+  package "nhanvienbanhang" as nv {
+  }
+  package "quanli" as ql {
+  }
+}
+
+package "dao" as dao {
+}
+
+package "model" as model {
+}
+
+view -down- dao
+dao -down- model
+@enduml

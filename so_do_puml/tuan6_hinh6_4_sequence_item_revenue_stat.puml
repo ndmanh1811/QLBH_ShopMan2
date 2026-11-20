@@ -1,0 +1,64 @@
+@startuml
+autonumber
+skinparam sequenceMessageAlign center
+
+actor "Manager" as Manager
+boundary "ManagerHomeFrm2.jsp" as HomeFrm
+boundary "SelectStatTypeFrm2.jsp" as TypeFrm
+boundary "SelectDateRangeFrm2.jsp" as DateFrm
+boundary "ItemRevenueStatFrm2.jsp" as StatFrm
+boundary "ItemTransactionDetailFrm2.jsp" as DetailFrm
+control "ItemRevenueStatDAO2" as StatDAO
+control "InvoiceDetailDAO2" as DetailDAO
+entity "ItemRevenueStat2" as StatEntity
+entity "InvoiceDetail2" as DetailEntity
+
+activate Manager
+Manager -> HomeFrm : chọn xem thống kê
+activate HomeFrm
+HomeFrm -> TypeFrm : gọi
+deactivate HomeFrm
+activate TypeFrm
+TypeFrm --> Manager : hiển thị
+Manager -> TypeFrm : chọn TK mặt hàng theo doanh thu
+TypeFrm -> DateFrm : gọi
+deactivate TypeFrm
+activate DateFrm
+DateFrm --> Manager : hiển thị
+Manager -> DateFrm : chọn khoảng ngày và click xem
+DateFrm -> StatFrm : gọi
+deactivate DateFrm
+activate StatFrm
+
+StatFrm -> StatDAO : gọi
+activate StatDAO
+StatDAO -> StatDAO : getItemRevenueStat()
+StatDAO -> StatEntity : gọi
+activate StatEntity
+StatEntity -> StatEntity : ItemRevenueStat2()
+StatEntity --> StatDAO : trả về
+deactivate StatEntity
+StatDAO --> StatFrm : trả về
+deactivate StatDAO
+
+StatFrm --> Manager : hiển thị
+Manager -> StatFrm : chọn 1 mặt hàng
+StatFrm -> DetailFrm : gọi
+deactivate StatFrm
+activate DetailFrm
+
+DetailFrm -> DetailDAO : gọi
+activate DetailDAO
+DetailDAO -> DetailDAO : getItemTransactionDetails()
+DetailDAO -> DetailEntity : gọi
+activate DetailEntity
+DetailEntity -> DetailEntity : InvoiceDetail2()
+DetailEntity --> DetailDAO : trả về
+deactivate DetailEntity
+DetailDAO --> DetailFrm : trả về
+deactivate DetailDAO
+
+DetailFrm --> Manager : hiển thị
+deactivate DetailFrm
+deactivate Manager
+@enduml

@@ -1,0 +1,114 @@
+@startuml
+skinparam linetype ortho
+hide circle
+hide empty members
+skinparam classAttributeIconSize 0
+
+abstract class "Member2" as Member2 {
+  -username
+  -password
+  -fullName
+  -address
+  -email
+  -phone
+}
+
+class Customer2 {
+  -customerCode
+}
+
+class CustomerStat2 {
+  -totalInvoices
+  -totalAmount
+}
+
+abstract class "Employee2" as Employee2 {
+  -employeeCode
+  -position
+}
+
+class SalesStaff2
+class Manager2
+
+class Supplier2 {
+  -supplierCode
+  -name
+  -address
+  -phone
+  -email
+  -description
+}
+
+class SupplierStat2 {
+  -totalImports
+  -totalImportValue
+}
+
+class Item2 {
+  -itemCode
+  -name
+  -unit
+  -price
+  -stockQuantity
+  -description
+}
+
+class ItemRevenueStat2 {
+  -totalQuantitySold
+  -totalRevenue
+}
+
+class ItemImportStat2 {
+  -totalQuantityImported
+  -totalImportAmount
+}
+
+class Invoice2 {
+  -invoiceCode
+  -createdDate
+  -deliveryAddress
+  -totalAmount
+  -status
+  -deliveryStaffName
+}
+
+class InvoiceDetail2 {
+  -quantity
+  -unitPrice
+}
+
+class ImportReceipt2 {
+  -receiptCode
+  -importDate
+  -totalAmount
+}
+
+class ImportReceiptDetail2 {
+  -quantity
+  -importPrice
+}
+
+' 1. Quan hệ kế thừa (Generalization)
+Member2 <|-- Customer2
+Member2 <|-- Employee2
+Customer2 <|-- CustomerStat2
+Employee2 <|-- SalesStaff2
+Employee2 <|-- Manager2
+
+Supplier2 <|-- SupplierStat2
+Item2 <|-- ItemRevenueStat2
+Item2 <|-- ItemImportStat2
+
+' 2. Quan hệ hợp thành (Aggregation)
+Customer2 --o Invoice2
+SalesStaff2 --o Invoice2
+Manager2 --o ImportReceipt2
+Supplier2 --o ImportReceipt2
+
+' 3. Lớp liên kết trung gian (Association Class)
+Invoice2 -right- Item2
+(Invoice2, Item2) .. InvoiceDetail2
+
+Item2 -right- ImportReceipt2
+(Item2, ImportReceipt2) .. ImportReceiptDetail2
+@enduml

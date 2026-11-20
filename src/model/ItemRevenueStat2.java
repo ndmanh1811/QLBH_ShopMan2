@@ -9,12 +9,6 @@ public class ItemRevenueStat2 extends Item2 {
         super();
     }
 
-    public ItemRevenueStat2(int id, String itemCode, String name, String unit, float price, int stockQuantity, String description, int totalQuantitySold, float totalRevenue) {
-        super(id, itemCode, name, unit, price, stockQuantity, description);
-        this.totalQuantitySold = totalQuantitySold;
-        this.totalRevenue = totalRevenue;
-    }
-
     public int getTotalQuantitySold() { return totalQuantitySold; }
     public void setTotalQuantitySold(int totalQuantitySold) { this.totalQuantitySold = totalQuantitySold; }
 

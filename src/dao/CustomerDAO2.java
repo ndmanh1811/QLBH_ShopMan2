@@ -16,7 +16,6 @@ public class CustomerDAO2 extends DAO2 {
      * @return true neu luu thanh cong, false neu that bai
      */
     public boolean saveCustomer(Customer2 customer) {
-        boolean success = false;
         String sqlMember = "INSERT INTO tblMember2 (username, password, fullName, address, email, phone) VALUES (?, ?, ?, ?, ?, ?)";
         String sqlCustomer = "INSERT INTO tblCustomer2 (tblMember2id, customerCode) VALUES (?, ?)";
 
@@ -41,9 +40,9 @@ public class CustomerDAO2 extends DAO2 {
                 customer.setId(memberId);
             }
 
-            // Sinh ma customerCode neu chua co: KH + 4 chu so
+            // Sinh ma customerCode neu chua co: KH + 3 chu so (KH001, KH002...)
             if (customer.getCustomerCode() == null || customer.getCustomerCode().trim().isEmpty()) {
-                customer.setCustomerCode("KH" + String.format("%04d", memberId));
+                customer.setCustomerCode("KH" + String.format("%03d", memberId));
             }
 
             PreparedStatement psCustomer = con.prepareStatement(sqlCustomer);
@@ -52,22 +51,20 @@ public class CustomerDAO2 extends DAO2 {
             psCustomer.executeUpdate();
 
             con.commit();
-            success = true;
+            return true;
         } catch (Exception e) {
             try {
                 con.rollback();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                // Bo qua ngoai le khi rollback
             }
-            e.printStackTrace();
-            success = false;
+            return false;
         } finally {
             try {
                 con.setAutoCommit(originalAutoCommit);
             } catch (Exception e) {
-                e.printStackTrace();
+                // Bo qua
             }
         }
-        return success;
     }
 }

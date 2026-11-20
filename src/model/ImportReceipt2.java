@@ -17,14 +17,6 @@ public class ImportReceipt2 implements Serializable {
     public ImportReceipt2() {
     }
 
-    public ImportReceipt2(int id, String receiptCode, Date importDate, Manager2 manager, Supplier2 supplier) {
-        this.id = id;
-        this.receiptCode = receiptCode;
-        this.importDate = importDate;
-        this.manager = manager;
-        this.supplier = supplier;
-    }
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

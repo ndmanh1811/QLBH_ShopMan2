@@ -1,0 +1,15 @@
+@startuml
+hide empty description
+skinparam linetype ortho
+
+[*] --> HienThiGDChinhKH
+state "Hiển thị GD chính KH" as HienThiGDChinhKH
+state "Hiển thị GD đăng kí
+TV" as HienThiGDDangKiTV
+state "Hiển thị GD đăng nhập" as HienThiGDDangNhap
+
+HienThiGDChinhKH --> HienThiGDDangKiTV : Chọn chức năng đăng kí thành viên
+HienThiGDDangKiTV --> HienThiGDChinhKH : Chọn quay lại
+HienThiGDDangKiTV --> HienThiGDDangKiTV : Thông tin thiếu hoặc trùng lặp
+HienThiGDDangKiTV --> HienThiGDDangNhap : Nhập thông tin hợp lệ và nhấn đăng kí
+@enduml
