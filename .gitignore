@@ -1,0 +1,14 @@
+# Eclipse metadata & caches
+.metadata/
+.recommenders/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
